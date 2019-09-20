@@ -112,7 +112,7 @@ public:
 		//free(header);
 	}
 	bool open() {
-		fd = fopen(fname, "w");
+		fd = fopen(fname, "wb");
 		if (fd != NULL)
 			return true;
 		return false;
@@ -144,7 +144,7 @@ public:
 
 	void writeData(char* dataNm) {//It may be called when, record needs to be turned off. man
 		cout << dataNm << endl;
-		FILE* fData = fopen(dataNm, "r");
+		FILE* fData = fopen(dataNm, "rb");
 		//FILE* fData = fopen("C:\\Users\\Owner\\Desktop\\test.pcm", "r");
 		//sampleCount = 80000;
 		int temp = (int)sampleCount;
@@ -216,12 +216,12 @@ int main() {
 			pcmFn = "C:\\Users\\Owner\\Desktop\\output.pcm";
 			hw = headerWriter(fn);
 			hw.open();
-			pcmFd = fopen(pcmFn, "w");
+			pcmFd = fopen(pcmFn, "wb");
 			aRecordCheck = 2;
 		}
 		else if (aRecordCheck == 4) {
-			//hw.writeHeader();
-			//hw.writeData(pcmFn);
+			hw.writeHeader();
+			hw.writeData(pcmFn);
 			
 			//save the recordfile.
 			aRecordCheck = 0;
@@ -379,7 +379,6 @@ DWORD WINAPI audioThread(void* arg) {
 	//when audio frame comes or terminal signal is on, process them.
 	return 0;
 }
-
 UINT xxxx = 0;
 
 void processAudio(IAudioBeamSubFrame* pAudioBeamSubFrame) { //monitor check and record check is needed.
