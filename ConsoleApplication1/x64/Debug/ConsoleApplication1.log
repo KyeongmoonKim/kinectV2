@@ -1,4 +1,4 @@
 ﻿  Source.cpp
-c:\users\owner\documents\visual studio 2015\projects\consoleapplication1\consoleapplication1\source.cpp(518): warning C4305: 'return': truncation from 'int' to 'bool'
+c:\users\owner\documents\visual studio 2015\projects\consoleapplication1\consoleapplication1\source.cpp(530): warning C4305: 'return': truncation from 'int' to 'bool'
   ConsoleApplication1.vcxproj -> C:\Users\Owner\Documents\Visual Studio 2015\Projects\ConsoleApplication1\x64\Debug\ConsoleApplication1.exe
   ConsoleApplication1.vcxproj -> C:\Users\Owner\Documents\Visual Studio 2015\Projects\ConsoleApplication1\x64\Debug\ConsoleApplication1.pdb (Full PDB)

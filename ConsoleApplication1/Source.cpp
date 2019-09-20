@@ -13,10 +13,14 @@
 #include<string>
 #include<math.h>
 
-#define WAVEFORMAT_PCM 0x0003 //0x0003 is float
+#define WAVEFORMAT_PCM 0x0003
 #define CHANNEL 1
 #define SAMPLE_RATE 16000
-#define BIT_RATE 32 //32 is ieee754 32bit float
+#define BIT_RATE 32
+/*#define WAVEFORMAT_PCM 0x0003 //0x0003 is float
+#define CHANNEL 1
+#define SAMPLE_RATE 16000
+#define BIT_RATE 32 //32 is ieee754 32bit float*/
 
 using namespace std;
 using namespace cv;
@@ -114,7 +118,6 @@ public:
 		return false;
 	}
 	void writeHeader() {
-		//cout << sampleCount << endl;
 		//RIFF
 		memcpy(header->Riff.ChunkID, "RIFF", 4);
 		header->Riff.ChunkSize = sizeof(float)*sampleCount+36;
@@ -135,10 +138,12 @@ public:
 		memcpy(header->Data.ChunkID, "data", 4);
 		header->Data.ChunkSize = sizeof(float)*sampleCount;
 		fwrite(header, sizeof(HEADER), 1, fd);
+		fflush(fd);
 		
 	}
 
 	void writeData(char* dataNm) {//It may be called when, record needs to be turned off. man
+		cout << dataNm << endl;
 		FILE* fData = fopen(dataNm, "r");
 		//FILE* fData = fopen("C:\\Users\\Owner\\Desktop\\test.pcm", "r");
 		//sampleCount = 80000;
@@ -155,6 +160,7 @@ public:
 			fread(&buffer[0], sizeof(float), size, fData);
 			//need to -1~+1, IEEE754 32 bit float to -32768~32767 short int. but i do this in the process audio.
 			fwrite(&buffer[0], sizeof(float), size, fd);
+			fflush(fd);
 			temp -= size;
 			free(buffer);
 		}
@@ -214,8 +220,9 @@ int main() {
 			aRecordCheck = 2;
 		}
 		else if (aRecordCheck == 4) {
-			hw.writeHeader();
-			hw.writeData(pcmFn);
+			//hw.writeHeader();
+			//hw.writeData(pcmFn);
+			
 			//save the recordfile.
 			aRecordCheck = 0;
 		}
@@ -373,22 +380,27 @@ DWORD WINAPI audioThread(void* arg) {
 	return 0;
 }
 
+UINT xxxx = 0;
+
 void processAudio(IAudioBeamSubFrame* pAudioBeamSubFrame) { //monitor check and record check is needed.
 	HRESULT hr = S_OK;
-	float* videoBuffer = NULL; //buffer
+	float* audioBuffer = NULL; //buffer
 	UINT cbRead = 0; //byte number
 
-	hr = pAudioBeamSubFrame->AccessUnderlyingBuffer(&cbRead, (BYTE **)&videoBuffer);
+	hr = pAudioBeamSubFrame->AccessUnderlyingBuffer(&cbRead, (BYTE **)&audioBuffer);
 	if (FAILED(hr)) {
 		cout << "accessunderlyingBuffer failed!" << endl;
 		return;
 	}
 	else if (cbRead > 0) {
+		xxxx += cbRead;
+		cout << xxxx << endl;
 		DWORD sampleCount = cbRead / (sizeof(float));
 		unsigned int tt = (unsigned int)sampleCount;
 		//write part.
 		hw.sampleCount += tt;
-		fwrite(videoBuffer, sizeof(float), sampleCount, pcmFd);
+		fwrite(audioBuffer, sizeof(float), sampleCount, pcmFd);
+		fflush(pcmFd);
 	}
 	return;
 }
