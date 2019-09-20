@@ -255,12 +255,14 @@ unsigned WINAPI kinectFunc(void *arg) {
 			string s = "test";
 			s.append(to_string(windowCount));
 			namedWindow(s, WINDOW_AUTOSIZE);
-			if (recordCheck == 2) {
+			/*if (recordCheck == 2) {
 				Mat temp;
 				cvtColor(ret, temp, COLOR_BGRA2RGBA);
 				writer.write(temp);
-			}
-			imshow(s, ret);
+			}*/
+			Mat pr;
+			resize(ret, pr, Size(960, 540), 0, 0);
+			imshow(s, pr);
 			if (waitKey(10) == VK_ESCAPE)
 				break;
 		}
@@ -496,6 +498,8 @@ bool InitKinect() {//init kinect varaibles.
 		HRESULT hr = sensor->Open();
 		framesource = NULL;
 		sensor->get_ColorFrameSource(&framesource);
+		if (FAILED(hr))
+			cout << "?!?#?!#?!#" << endl;
 		hr = framesource->OpenReader(&reader);
 		if (framesource) {
 			framesource->Release();

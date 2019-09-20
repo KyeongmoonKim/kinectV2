@@ -111,7 +111,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_world341.lib;opencv_world341d.lib;Kinect20.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world341d.lib;Kinect20.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Owner\Downloads\library\opencv341\opencv\build\x64\vc15\lib;C:\Program Files\Microsoft SDKs\Kinect\v2.0_1409\Lib\x64;C:\Users\Owner\Downloads\library\opencv341\opencv\build\bin</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
